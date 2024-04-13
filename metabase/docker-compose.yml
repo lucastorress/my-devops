@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  metabase:
+    image: metabase/metabase:latest
+    ports:
+      - ${PORT:-3000}:${PORT:-3000}
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: ${MB_DB_DBNAME:-metabase}
+      MB_DB_PORT: ${MB_DB_PORT:-5432}
+      MB_DB_USER: ${MB_DB_USER:-metabase}
+      MB_DB_PASS: ${MB_DB_PASS:-metabase123}
+      MB_DB_HOST: postgres-db
+    depends_on:
+      - postgres-db
+
+  postgres-db:
+    image: postgres:12
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-metabase}
+      POSTGRES_USER: ${POSTGRES_USER:-metabase}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-metabase123}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
